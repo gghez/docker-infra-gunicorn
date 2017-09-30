@@ -1,0 +1,44 @@
+version: '2'
+services:
+    mongo:
+        image: mongo:3.4
+        container_name: infra-gunicorn-mongo
+        networks:
+            - backend
+
+    proxy:
+        image: nginx:alpine
+        container_name: infra-gunicorn-proxy
+        networks:
+            - frontend
+        depends_on:
+            - front
+            - api
+        volumes:
+            - ./proxy-nginx.conf:/etc/nginx/nginx.conf:ro
+        ports:
+            - "80:80"
+
+    front:
+        image: infra-gunicorn-front:latest
+        build: ./front
+        networks:
+            - frontend
+        depends_on:
+            - api
+        container_name: infra-gunicorn-front
+
+    api:
+        image: infra-gunicorn-api:latest
+        build: ./api
+        networks:
+            - frontend
+            - backend
+        depends_on:
+            - mongo
+        container_name: infra-gunicorn-api
+
+networks:
+    frontend:
+    backend:
+
