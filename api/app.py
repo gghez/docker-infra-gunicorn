@@ -1,7 +1,10 @@
 import logging
 
 from pymongo import MongoClient
+from flask import Flask, request
 
+
+app = Flask(__name__)
 
 client = MongoClient('mongo', 27017)
 messages = client.superdb.messages
@@ -13,14 +16,14 @@ def _init():
         msg = {'text': 'Message from mongo'}
         messages.insert_one(msg)
 
-def app(environ, start_response):
+@app.route('/')
+def get_message():
     _init()
 
-    logging.info('req - %r', environ)
+    logging.info('remote address: %s', request.remote_addr)
+    logging.info('req headers: %r', request.headers)
 
-    data = bytes(messages.find_one()['text'] + '\n', 'utf-8')
-    status = "200 OK"
-    headers = [('Content-Type', 'text/plain'), ('Content-Length', str(len(data)))]
-    start_response(status, headers)
-    return iter([data])
+    data = messages.find_one()['text']
+
+    return data
 
