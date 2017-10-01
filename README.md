@@ -4,7 +4,7 @@ I tried to build a easy access docker infrastructure to handle a common scenario
 
 Components:
 - MongoDB as database
-- Python + Gunicorn as Web API
+- Python Flask + Gunicorn as Web API
 - HTML/JS front hosted by Nginx
 - Reverse Proxy (Nginx)
 
