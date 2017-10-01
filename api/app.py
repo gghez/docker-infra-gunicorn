@@ -1,14 +1,22 @@
+import logging
+
 from pymongo import MongoClient
+
+
 client = MongoClient('mongo', 27017)
 messages = client.superdb.messages
 
 def _init():
+    logging.info('_init')
+
     if len(list(messages.find())) == 0:
         msg = {'text': 'Message from mongo'}
         messages.insert_one(msg)
 
 def app(environ, start_response):
     _init()
+
+    logging.info('req - %r', environ)
 
     data = bytes(messages.find_one()['text'] + '\n', 'utf-8')
     status = "200 OK"
