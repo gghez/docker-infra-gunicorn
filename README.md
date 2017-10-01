@@ -1,5 +1,13 @@
 # docker-infra-gunicorn
-Simple docker infrastructure with gunicorn (+python) + NGINX reverse proxy
+
+I tried to build a easy access docker infrastructure to handle a common scenario in web deployment.
+
+Components:
+- MongoDB as database
+- Python + Gunicorn as Web API
+- HTML/JS front hosted by Nginx
+- Reverse Proxy (Nginx)
+
 
 ## Build
 
